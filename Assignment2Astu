@@ -1,3 +1,4 @@
+'''<------------------Importing the required packages---------------------------->'''
 import cv2
 import numpy as np
 import matplotlib.image as mpimg
@@ -51,7 +52,7 @@ def voting(return_I,eta,a,b):
     return   column_I
 
 
-#Updating the mean and varience images using a weighted average method(chybshev inequality)
+#Updating the mean and varience images using a weighted average method
 
 def Update_function(column_I,img_path,mean,varience,alpha):
     img = mpimg.imread(img_path)
@@ -68,27 +69,23 @@ def Update_function(column_I,img_path,mean,varience,alpha):
     return updated_mean , updated_varience
 
 
-'''
-     Unzipping the zipped bmp file
-     '''
-from zipfile import ZipFile
-zf = ZipFile('/content/AirStripVideoDataSetForBackGroundSubtraction.zip', 'r')
-zf.extractall()
-zf.close()
 
 
-'''Main function starts
-This function takes an image at a time and calculates the change of current image from previous image and update its mean and varience accordingly.
-'''
-def background_substraction(img_directory,lmbda,eta,a,b,alpha):
+import os
+path = os.chdir("C:\\Users\\91789\\Desktop\\AirStripVideoDataSetForBackGroundSubtraction\\AirStripVideo")#My computer path to the datset directory
+
+
+
+
+def background_substraction(img_directory,num_of_input,lmbda,eta,a,b,alpha):
     img_file = os.listdir(img_directory)
     init_image = os.path.join(img_directory,img_file[0])
     mean,varience = initial_Background(init_image)
 
-    for i in range(1,30):
+    for i in range(1,num_of_input):
         img_path = os.path.join(img_directory,img_file[i])
-
-        fig ,ax = plt.subplots(1,3,figsize=(15,15))
+        print(i)
+        fig ,ax = plt.subplots(1,3,figsize=(10,10))
         return_I = foreground_change_Detection(img_path,mean,varience,lmbda)
         ax[0].imshow(return_I,cmap= 'gray')
         column_I = voting(return_I,eta,a,b)
@@ -97,8 +94,42 @@ def background_substraction(img_directory,lmbda,eta,a,b,alpha):
         img = cv2.imread(img_path)
         ax[2].imshow(img,cmap= 'gray')
         plt.show()
+def Parameter_change_detection(img_directory,image,lmbda,eta,a,b,alpha):
+    
+    img_file = os.listdir(img_directory)
+    init_image = os.path.join(img_directory,img_file[0])
+    mean,varience = initial_Background(init_image)
 
+    print('ckecking for lambda and eta value',lmbda,eta)
+    img_path = os.path.join(img_directory,img_file[image])
+    fig ,ax = plt.subplots(1,3,figsize=(10,10))
+    return_I = foreground_change_Detection(img_path,mean,varience,lmbda)
+    ax[0].imshow(return_I,cmap= 'gray')
+    column_I = voting(return_I,eta,a,b)
+    mean,varience = Update_function(column_I,img_path,mean,varience,alpha)
+    ax[1].imshow(column_I,cmap= 'gray')
+    img = cv2.imread(img_path)
+    ax[2].imshow(img,cmap= 'gray')
+    plt.show()
 
+    
+'''<-------------------------End  of Functions------------------------------------->'''
 
-background_substraction('/content/AirStripVideo/Images',0.8,0.7,8,8,0.8)
+num = int(input('HOW MANY NUMBER OF SAMPLE WNAT TO SHOW'))
+background_substraction('./Images',num,0.8,0.8,8,8,0.8)#giving the best
 
+'''
+    Noting down the changes in any one of the predicted images as the eta and lambda parameters are varied.
+'''
+eta_and_lambda_values = np.arange(0.7,0.91,0.02)
+image = int(input('what file want to check the change'))
+'''
+    Performing  Background Subtraction on the dataset by varying:
+        A) eta (Voting parameter) from 0.7 to 0.9 in steps of 0.02.
+        B) lambda (Chebyshev thresholding parameter) from 0.7 to 0.9 in steps of 0.02.
+
+'''
+
+for i in np.nditer(eta_and_lambda_values):#For loop to iterate the parameters
+    Parameter_change_detection('./Images',image,i,i,8,8,0.8)
+    

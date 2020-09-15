@@ -30,7 +30,8 @@ def dataset_cleaning(dataset):
 
 def plotting(dataset):
 
-    sns.pairplot(dataset[dataset.columns],hue='target', palette='RdBu')
+    data = dataset.drop(columns= ['chol','sex','fbs','restecg','oldpeak'])
+    sns.pairplot(data,hue='target', palette='RdBu')
     plt.show()
 
 def train_test_split(cleaned_data ,target):
@@ -103,13 +104,13 @@ def Decision_tree_Classifier(X_train,y_train,X_test,y_test):
     print('Clasification Report of DTC is:',classification_report(y_test,pred))
     
     #Dendogram of the tree
-    
+    '''
     dot_data = export_graphviz(clf,out_file=None)
     graph = pydotplus.graph_from_dot_data(dot_data)
 
     Image(graph.create_png())
 
-    
+    '''
     return accuracy_score
 
 def Random_forest_Classifier(X_train,y_train,X_test,y_test):
@@ -302,6 +303,10 @@ Application(best_clf,X_test,y_test)#Heart disease detector application
 
 #final_df = pd.DataFrame(X_test)
 #print('Final Dataframe is:\n',final_df)
+
+
+
+
 
 
 

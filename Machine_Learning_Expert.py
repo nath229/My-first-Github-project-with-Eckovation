@@ -35,16 +35,10 @@ import numpy as np
 
 def Training_images():
     with gzip.open('train-images-idx3-ubyte.gz', 'r') as f:
-        # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
-        # second 4 bytes is the number of images
         image_count = int.from_bytes(f.read(4), 'big')
-        # third 4 bytes is the row count
         row_count = int.from_bytes(f.read(4), 'big')
-        # fourth 4 bytes is the column count
         column_count = int.from_bytes(f.read(4), 'big')
-        # rest is the image pixel data, each pixel is stored as an unsigned byte
-        # pixel values are 0 to 255
         image_data = f.read()
         train_images = np.frombuffer(image_data, dtype=np.uint8)\
             .reshape((image_count, row_count, column_count,1))
@@ -53,28 +47,18 @@ def Training_images():
 
 def Training_labels():
     with gzip.open('train-labels-idx1-ubyte.gz', 'r') as f:
-        # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
-        # second 4 bytes is the number of labels
         label_count = int.from_bytes(f.read(4), 'big')
-        # rest is the label data, each label is stored as unsigned byte
-        # label values are 0 to 9
         label_data = f.read()
         train_labels = np.frombuffer(label_data, dtype=np.uint8)
         return train_labels
 
 def Testing_images():
     with gzip.open('t10k-images-idx3-ubyte.gz', 'r') as f:
-        # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
-        # second 4 bytes is the number of images
         image_count = int.from_bytes(f.read(4), 'big')
-        # third 4 bytes is the row count
         row_count = int.from_bytes(f.read(4), 'big')
-        # fourth 4 bytes is the column count
         column_count = int.from_bytes(f.read(4), 'big')
-        # rest is the image pixel data, each pixel is stored as an unsigned byte
-        # pixel values are 0 to 255
         image_data = f.read()
         test_images = np.frombuffer(image_data, dtype=np.uint8)\
             .reshape((image_count, row_count, column_count,1))
@@ -82,12 +66,8 @@ def Testing_images():
 
 def Testing_labels():
     with gzip.open('t10k-labels-idx1-ubyte.gz', 'r') as f:
-        # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
-        # second 4 bytes is the number of labels
         label_count = int.from_bytes(f.read(4), 'big')
-        # rest is the label data, each label is stored as unsigned byte
-        # label values are 0 to 9
         label_data = f.read()
         test_labels = np.frombuffer(label_data, dtype=np.uint8)
         return test_labels
@@ -144,7 +124,7 @@ model , callbacks_list = Keras_Model()
 print(model.summary())
 model.fit(train_images,train_labels,validation_data=(test_images,test_labels),epochs = 5,batch_size = 56, callbacks = callbacks_list )
 scores = model.evaluate(test_images,test_labels,verbose = 0)
-print("CNN error :%2f%% "%(100-scores[1]*100))
+print("CNN error :%2f%% "%(100-scores[1]*100)) 
 model.save('Utpal_reload.h5')
 
 #Application
@@ -156,7 +136,7 @@ from collections import deque
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 
-model1 = load_model('Utpal_reload.h5')
+model1 = load_model('Mnist_reload.h5')
 print(model1)
 
 '''<------------------------Evaluation of the model------------------------>'''

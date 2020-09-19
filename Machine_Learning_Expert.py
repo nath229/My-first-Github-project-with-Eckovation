@@ -9,7 +9,7 @@ from keras.models import Sequential
 from keras.callbacks import ModelCheckpoint
 import keras.backend as K
 
-#CNN model
+'''<------------------------------------CNN model-------------------------------------------->'''
 
 def Keras_Model():
     num_of_classes = 10
@@ -34,7 +34,7 @@ import numpy as np
 
 
 def Training_images():
-    with gzip.open('/content/train-images-idx3-ubyte.gz', 'r') as f:
+    with gzip.open('train-images-idx3-ubyte.gz', 'r') as f:
         # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
         # second 4 bytes is the number of images
@@ -52,7 +52,7 @@ def Training_images():
 
 
 def Training_labels():
-    with gzip.open('/content/train-labels-idx1-ubyte.gz', 'r') as f:
+    with gzip.open('train-labels-idx1-ubyte.gz', 'r') as f:
         # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
         # second 4 bytes is the number of labels
@@ -64,7 +64,7 @@ def Training_labels():
         return train_labels
 
 def Testing_images():
-    with gzip.open('/content/t10k-images-idx3-ubyte.gz', 'r') as f:
+    with gzip.open('t10k-images-idx3-ubyte.gz', 'r') as f:
         # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
         # second 4 bytes is the number of images
@@ -81,7 +81,7 @@ def Testing_images():
         return test_images
 
 def Testing_labels():
-    with gzip.open('/content/t10k-labels-idx1-ubyte.gz', 'r') as f:
+    with gzip.open('t10k-labels-idx1-ubyte.gz', 'r') as f:
         # first 4 bytes is a magic number
         magic_number = int.from_bytes(f.read(4), 'big')
         # second 4 bytes is the number of labels
@@ -92,21 +92,21 @@ def Testing_labels():
         test_labels = np.frombuffer(label_data, dtype=np.uint8)
         return test_labels
 
+'''<------------------------------------Data Cleaning----------------------------------->'''
 train_images = Training_images() 
 train_labels  = Training_labels()
 test_images = Testing_images()
 test_labels = Testing_labels()
 
-print('train images')
-train_images.shape
+print('train images shape')
+print(train_images.shape)
 
-print('train labels')
-train_labels.shape
+print('train labels shape')
+print(train_labels.shape)
 
 
-t = np.vstack(train_labels)
+t = np.vstack(train_labels)#Temporary variable
 
-t.shape
 
 train_labels = np_utils.to_categorical(t)
 
@@ -119,19 +119,21 @@ t = np.vstack(test_labels)
 t.shape
 
 test_labels = np_utils.to_categorical(t)
-test_labels.shape
+print('train label shape')
+print(test_labels.shape)
 
 #Show some sample of train images
 
-
 import matplotlib.pyplot as plt
+
+
 for i in range(0,10):
     image = np.asarray(train_images[i]).squeeze()
     image = image/255 # to reduce calculation
     plt.imshow(image)
     plt.show()
 
-import matplotlib.pyplot as plt
+
 for i in range(0,10):
     image = np.asarray(test_images[i]).squeeze()
     image = image/255 # to reduce calculation
@@ -157,8 +159,8 @@ from keras.preprocessing.image import img_to_array
 model1 = load_model('Utpal_reload.h5')
 print(model1)
 
-#Evaluation of the model
-test_images[0].shape
+'''<------------------------Evaluation of the model------------------------>'''
+
 
 pred = model1.predict([test_images])
 

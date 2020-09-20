@@ -1,4 +1,4 @@
-#Importing the required libraries
+'''<------------------------------------------------Importing the required libraries----------------------------------------------->'''
 
 
 from keras import layers
@@ -9,7 +9,7 @@ from keras.models import Sequential
 from keras.callbacks import ModelCheckpoint
 import keras.backend as K
 
-'''<------------------------------------CNN model-------------------------------------------->'''
+'''<-------------------------------------------------CNN model----------------------------------------------------------------->'''
 
 def Keras_Model():
     num_of_classes = 10
@@ -27,7 +27,7 @@ def Keras_Model():
     callbacks_list = [checkpoint1]
     return model,callbacks_list
 
-#Function to extract X_train,y_train,X_test and Y_test images
+'''<----------------------------------Function to extract X_train,y_train,X_test and Y_test images-------------------------------------->'''
 
 import gzip
 import numpy as np
@@ -72,7 +72,7 @@ def Testing_labels():
         test_labels = np.frombuffer(label_data, dtype=np.uint8)
         return test_labels
 
-'''<------------------------------------Data Cleaning----------------------------------->'''
+'''<------------------------------------------------------------Data Cleaning-------------------------------------------------------->'''
 train_images = Training_images() 
 train_labels  = Training_labels()
 test_images = Testing_images()
@@ -88,7 +88,7 @@ print(train_labels.shape)
 t = np.vstack(train_labels)#Temporary variable
 
 
-train_labels = np_utils.to_categorical(t)
+train_labels = np_utils.to_categorical(t) #To convert labeled data array
 
 
 print('train label shape')
@@ -96,13 +96,12 @@ train_labels.shape
 
 test_images.shape
 t = np.vstack(test_labels)
-t.shape
 
-test_labels = np_utils.to_categorical(t)
+test_labels = np_utils.to_categorical(t) #To convert labeled data array
 print('train label shape')
 print(test_labels.shape)
 
-#Show some sample of train images
+'''<----------------------------------------------------Showing  some sample of train images-------------------------------------------------->'''
 
 import matplotlib.pyplot as plt
 
@@ -125,9 +124,9 @@ print(model.summary())
 model.fit(train_images,train_labels,validation_data=(test_images,test_labels),epochs = 5,batch_size = 56, callbacks = callbacks_list )
 scores = model.evaluate(test_images,test_labels,verbose = 0)
 print("CNN error :%2f%% "%(100-scores[1]*100)) 
-model.save('Utpal_reload.h5')
+model.save('Mnist_reload.h5')
 
-#Application
+'''<-------------------------------------------------Application--------------------------------------------------->'''
 
 
 from keras.models import load_model
@@ -139,7 +138,7 @@ from keras.preprocessing.image import img_to_array
 model1 = load_model('Mnist_reload.h5')
 print(model1)
 
-'''<------------------------Evaluation of the model------------------------>'''
+'''<-------------------------------------------------Evaluation of the model------------------------------------------>'''
 
 
 pred = model1.predict([test_images])

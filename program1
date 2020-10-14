@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+void func(int len,int * a,int d)
+{
+    int i,j,temp,*t;
+        for(i=1;i<=d;i++)
+        {
+            for(j=0;j<len;j++)
+            {
+                if(j==0)
+                {
+                    temp = *a;
+                }
+                else {
+                    t = a; 
+                    *t = *(++a);
+                    
+                }
+            }
+            *a = temp;
+        }
+}
+int main()
+{
+    int i,arr[] = {1,2,3},d=2;
+    int len = sizeof(arr)/sizeof(int);
+    
+    func(len , arr,d);
+    
+    for(i=0;i<len;i++)
+    {
+        printf("%d\t",arr[i]);
+    }
+    
+
+    return 0;
+}
